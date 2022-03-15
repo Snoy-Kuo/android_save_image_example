@@ -1,7 +1,7 @@
 package com.snoy.save_img_example
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.snoy.save_img_example.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
