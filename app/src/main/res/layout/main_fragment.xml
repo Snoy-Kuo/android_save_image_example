@@ -1,21 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.main.MainFragment">
 
-    <TextView
-        android:id="@+id/message"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="MainFragment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
+        android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <RadioGroup
+            android:id="@+id/rg_img_src"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/rb_internet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Image from internet"
+                tools:ignore="HardcodedText" />
+
+            <RadioButton
+                android:id="@+id/rb_res"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Image from resources"
+                tools:ignore="HardcodedText" />
+
+            <RadioButton
+                android:id="@+id/rb_assets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Image from assets"
+                tools:ignore="HardcodedText" />
+        </RadioGroup>
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="300dp"
+            android:layout_height="500dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription,HardcodedText"
+            tools:src="@drawable/fhd_img" />
+    </LinearLayout>
+</ScrollView>
