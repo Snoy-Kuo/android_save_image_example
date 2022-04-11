@@ -8,7 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <RadioGroup
             android:id="@+id/rg_img_src"
@@ -38,13 +39,45 @@
                 tools:ignore="HardcodedText" />
         </RadioGroup>
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="300dp"
-            android:layout_height="500dp"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            tools:ignore="ContentDescription,HardcodedText"
-            tools:src="@drawable/fhd_img" />
+        <LinearLayout
+            android:id="@+id/img_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="300dp"
+                android:layout_height="400dp"
+                android:layout_gravity="center"
+                android:layout_marginVertical="20dp"
+                android:scaleType="fitCenter"
+                tools:ignore="ContentDescription,HardcodedText"
+                tools:src="@drawable/fhd_img" />
+
+            <Button
+                android:id="@+id/btn_app_folder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save to app folder"
+                android:textAllCaps="false"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btn_gallery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save to gallery"
+                android:textAllCaps="false"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btn_share"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Share to ..."
+                android:textAllCaps="false"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
