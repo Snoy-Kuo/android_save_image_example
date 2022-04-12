@@ -1,9 +1,12 @@
 package com.snoy.save_img_example.ui.main
 
+import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +19,7 @@ import coil.drawable.CrossfadeDrawable
 import coil.load
 import com.snoy.save_img_example.R
 import com.snoy.save_img_example.databinding.MainFragmentBinding
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 
 
 class MainFragment : Fragment() {
@@ -71,11 +71,23 @@ class MainFragment : Fragment() {
         binding.btnAppFolder.setOnClickListener {
             val fileName: String = getFileName(binding.rgImgSrc.checkedRadioButtonId)
             val bitmap = getBitmap(binding.image)
-            val success = savoToAppFolder(bitmap, fileName)
+            val success = savoToAppFileFolder(bitmap, fileName)
             Log.d("RDTest", "savoToAppFolder ${if (success) "success" else "fail"}.")
             Toast.makeText(
                 requireContext(),
                 "savoToAppFolder ${if (success) "success" else "fail"}.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        binding.btnGallery.setOnClickListener {
+            val fileName: String = getFileName(binding.rgImgSrc.checkedRadioButtonId)
+            val bitmap = getBitmap(binding.image)
+            val success = savoToGallery(bitmap, fileName)
+            Log.d("RDTest", "savoToGallery ${if (success) "success" else "fail"}.")
+            Toast.makeText(
+                requireContext(),
+                "savoToGallery ${if (success) "success" else "fail"}.",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -94,7 +106,7 @@ class MainFragment : Fragment() {
     }
 
     //ref= https://microeducate.tech/android-share-image-in-imageview-without-saving-in-sd-card/
-    private fun savoToAppFolder(bitmap: Bitmap?, fileName: String): Boolean {
+    private fun savoToAppFolder(bitmap: Bitmap?, parentDir: File, fileName: String): Boolean {
         if (bitmap == null) {
             return false
         }
@@ -105,7 +117,7 @@ class MainFragment : Fragment() {
             //externalCacheDir = /sdcard/Android/data/app_folder/cache/
             //getExternalFilesDir(null) = /sdcard/Android/data/app_folder/files/
 
-            val path = File(requireContext().externalCacheDir, "images")
+            val path = File(parentDir, "images")
             path.mkdirs() // don't forget to make the directory
             val stream =
                 FileOutputStream(File(path, "$fileName.png")) // overwrites this image every time
@@ -119,6 +131,38 @@ class MainFragment : Fragment() {
             return false
         }
         return true
+    }
+
+    private fun savoToAppFileFolder(bitmap: Bitmap?, fileName: String): Boolean {
+        return savoToAppFolder(bitmap, requireContext().getExternalFilesDir(null)!!, fileName)
+    }
+
+    //ref = https://stackoverflow.com/a/63812257
+    private fun savoToGallery(bitmap: Bitmap?, fileName: String): Boolean {
+        if (bitmap == null) {
+            return false
+        }
+        val values = ContentValues()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
+        }
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+        values.put(MediaStore.Images.ImageColumns.DISPLAY_NAME, fileName)
+        values.put(MediaStore.Images.ImageColumns.TITLE, fileName)
+
+        val uri: Uri? = requireContext().contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            values
+        )
+        uri?.let {
+            requireContext().contentResolver.openOutputStream(uri)?.let { stream ->
+                val oStream = BufferedOutputStream(stream)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, oStream)
+                oStream.close()
+                return true
+            }
+        }
+        return false
     }
 
     private fun getFileName(checkedRadioButtonId: Int): String {
