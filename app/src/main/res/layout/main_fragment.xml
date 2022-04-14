@@ -72,6 +72,14 @@
                 tools:ignore="HardcodedText" />
 
             <Button
+                android:id="@+id/btn_download"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save to download"
+                android:textAllCaps="false"
+                tools:ignore="HardcodedText" />
+
+            <Button
                 android:id="@+id/btn_share"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
