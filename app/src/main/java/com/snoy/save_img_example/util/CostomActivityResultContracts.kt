@@ -11,7 +11,8 @@ import androidx.core.content.ContextCompat
 /**
  * An [ActivityResultContract] to [request a permission][Activity.requestPermissions]
  */
-class RequestPermissionResultContract(var onPermissionGranted: () -> Unit={}) : ActivityResultContract<String, Boolean>() {
+class RequestPermissionResultContract(var onPermissionGranted: () -> Unit = {}) :
+    ActivityResultContract<String, Boolean>() {
     override fun createIntent(context: Context, input: String): Intent {
         return RequestMultiplePermissions.createIntent(arrayOf(input))
     }
@@ -20,9 +21,10 @@ class RequestPermissionResultContract(var onPermissionGranted: () -> Unit={}) : 
         if (intent == null || resultCode != Activity.RESULT_OK) return false
         val grantResults =
             intent.getIntArrayExtra(RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS)
-        val bRet = if (grantResults == null || grantResults.isEmpty()) false else grantResults[0] == PackageManager.PERMISSION_GRANTED
+        val bRet =
+            if (grantResults == null || grantResults.isEmpty()) false else grantResults[0] == PackageManager.PERMISSION_GRANTED
 
-        if (bRet){
+        if (bRet) {
             onPermissionGranted()
         }
         return bRet
@@ -31,15 +33,18 @@ class RequestPermissionResultContract(var onPermissionGranted: () -> Unit={}) : 
     override fun getSynchronousResult(
         context: Context, input: String?
     ): SynchronousResult<Boolean>? {
-        return if (input == null) {
-            SynchronousResult(false)
-        } else if (ContextCompat.checkSelfPermission(context, input)
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-            SynchronousResult(true)
-        } else {
-            // proceed with permission request
-            null
+        return when {
+            input == null -> {
+                SynchronousResult(false)
+            }
+            ContextCompat.checkSelfPermission(context, input)
+                    == PackageManager.PERMISSION_GRANTED -> {
+                SynchronousResult(true)
+            }
+            else -> {
+                // proceed with permission request
+                null
+            }
         }
     }
 }
@@ -84,7 +89,7 @@ class RequestMultiplePermissions :
         val permissions =
             intent.getStringArrayExtra(EXTRA_PERMISSIONS)
         val grantResults =
-            intent.getIntArrayExtra(RequestMultiplePermissions.EXTRA_PERMISSION_GRANT_RESULTS)
+            intent.getIntArrayExtra(EXTRA_PERMISSION_GRANT_RESULTS)
         if (grantResults == null || permissions == null) return emptyMap()
         val result: MutableMap<String?, Boolean> = HashMap()
         var i = 0
@@ -111,7 +116,7 @@ class RequestMultiplePermissions :
          * @see Activity.requestPermissions
          * @see Activity.onRequestPermissionsResult
          */
-        const val ACTION_REQUEST_PERMISSIONS =
+        private const val ACTION_REQUEST_PERMISSIONS =
             "androidx.activity.result.contract.action.REQUEST_PERMISSIONS"
 
         /**
