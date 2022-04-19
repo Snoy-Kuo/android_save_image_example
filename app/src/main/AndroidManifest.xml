@@ -3,6 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.snoy.save_img_example">
 
+    <!--add queries for sharing on Android11+-->
+    <queries>
+        <!--wechat-->
+        <package android:name="com.tencent.mm" />
+        <!--qq-->
+        <package android:name="com.tencent.mobileqq" />
+        <package android:name="com.tencent.qqlite" />
+        <!--weibo-->
+        <package android:name="com.sina.weibo" />
+        <!--qqzone-->
+        <package android:name="com.qzone" />
+    </queries>
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission
@@ -25,6 +38,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

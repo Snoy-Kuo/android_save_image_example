@@ -1,8 +1,11 @@
 package com.snoy.save_img_example.ui.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -14,7 +17,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -85,6 +90,12 @@ class MainFragment : Fragment() {
         binding.btnDownload.setOnClickListener { onClickSaveImg(it.id) }
 
         binding.btnGallery.setOnClickListener { onClickSaveImg(it.id) }
+
+        binding.btnShare.setOnClickListener {
+            val fileName = "shareToApp"
+            val bitmap = binding.image.getBitmap()
+            shareToApp(bitmap, fileName)
+        }
     }
 
     private fun onClickSaveImg(id: Int) {
@@ -262,5 +273,65 @@ class MainFragment : Fragment() {
         } else {
             onPermissionGranted()
         }
+    }
+
+    private val shareResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            // Optional - called as soon as the user selects an option from the system share dialog
+            //
+            Log.d("RDTest", "shareResult callback triggered result=$it")
+        }
+
+    // ref= https://medium.com/tech-takeaways/how-to-share-an-image-from-your-android-app-without-exposing-it-to-the-gallery-e9a7a214eb2c
+//    ref = https://developer.android.com/training/sharing/sendhttps://developer.android.com/training/sharing/send
+    @Suppress("SameParameterValue")
+    @SuppressLint("QueryPermissionsNeeded")
+    private fun shareToApp(bitmap: Bitmap?, fileName: String) {
+        val cachePath = bitmap.saveToAppCacheFolder(requireContext(), fileName)
+        val cachedImgFile = File(cachePath!!).apply {
+            deleteOnExit()
+        }
+        val shareImageFileUri: Uri = FileProvider.getUriForFile(
+            requireActivity(),
+            requireContext().applicationContext.packageName + ".provider",
+            cachedImgFile
+        )
+        val shareMessage = "Share image using"
+        val sharingIntent = Intent(Intent.ACTION_SEND).apply {
+//            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            type = "image/*"
+            putExtra(Intent.EXTRA_STREAM, shareImageFileUri)
+            putExtra(Intent.EXTRA_TEXT, shareMessage)
+            putExtra(Intent.EXTRA_TITLE, shareMessage)
+        }
+        val chooserIntent = Intent.createChooser(sharingIntent, shareMessage)
+
+//        val resInfoList: List<ResolveInfo> = requireContext().packageManager.queryIntentActivities(
+//            chooserIntent,
+//            PackageManager.MATCH_DEFAULT_ONLY
+//        )
+//        Log.d("RDTest", "resInfoList size= ${resInfoList.size}")
+//        for (resolveInfo in resInfoList) {
+//            val packageName: String = resolveInfo.activityInfo.packageName
+//            Log.d("RDTest", packageName)
+//            requireContext().grantUriPermission(
+//                packageName,
+//                shareImageFileUri,
+//                Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
+//            )
+//        }
+
+        //Option 1: Using the Android intent resolver
+//        shareResult.launch(sharingIntent)
+        //Option 2: Using the Android Sharesheet
+        shareResult.launch(chooserIntent)
+    }
+
+    override fun onDestroy() {
+
+        shareResult.unregister()
+        super.onDestroy()
     }
 }

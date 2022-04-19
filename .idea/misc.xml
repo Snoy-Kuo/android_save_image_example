@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/layout/main_activity.xml" value="0.11510416666666666" />
         <entry key="app/src/main/res/layout/main_fragment.xml" value="0.25" />
+        <entry key="app/src/main/res/xml/provider_paths.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>
