@@ -68,7 +68,7 @@ class MainFragment : Fragment() {
                     }
                 }
                 R.id.rb_assets -> {
-                    //ref= https://github.com/coil-kt/coil/issues/10
+                    //ref = https://github.com/coil-kt/coil/issues/10
                     binding.image.loadUsingCoil(Uri.parse("file:///android_asset/fhd_asset_img.png")) {
                         binding.imgResult.visibility = View.VISIBLE
                     }
@@ -251,8 +251,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    //ref = https://ithelp.ithome.com.tw/articles/10205635
-    // https://stackoverflow.com/a/66552678
+    // ref = https://stackoverflow.com/a/66552678
     private val reqLauncher =
         registerForActivityResult(RequestPermissionResultContract()) { result ->
             if (result) {

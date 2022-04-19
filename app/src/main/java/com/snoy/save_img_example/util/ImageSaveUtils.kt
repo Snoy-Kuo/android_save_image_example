@@ -14,7 +14,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.URL
 
-//ref= https://microeducate.tech/android-share-image-in-imageview-without-saving-in-sd-card/
+//ref = https://microeducate.tech/android-share-image-in-imageview-without-saving-in-sd-card/
 fun Bitmap?.saveToAppFolder(parentDir: File, fileName: String): String? {
     if (this == null) {
         return null

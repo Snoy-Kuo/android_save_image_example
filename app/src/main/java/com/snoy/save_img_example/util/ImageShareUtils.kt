@@ -7,8 +7,8 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import java.io.File
 
-// ref= https://medium.com/tech-takeaways/how-to-share-an-image-from-your-android-app-without-exposing-it-to-the-gallery-e9a7a214eb2c
-// ref = https://developer.android.com/training/sharing/sendhttps://developer.android.com/training/sharing/send
+// ref = https://medium.com/tech-takeaways/how-to-share-an-image-from-your-android-app-without-exposing-it-to-the-gallery-e9a7a214eb2c
+// ref = https://developer.android.com/training/sharing/send
 fun Bitmap.createSharingIntent(context: Context, fileName: String): Intent {
     val cachePath = this.saveToAppCacheFolder(context, fileName)
     val cachedImgFile = File(cachePath!!).apply {

@@ -3,19 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.snoy.save_img_example">
 
-    <!--add queries for sharing on Android11+-->
-    <queries>
-        <!--wechat-->
-        <package android:name="com.tencent.mm" />
-        <!--qq-->
-        <package android:name="com.tencent.mobileqq" />
-        <package android:name="com.tencent.qqlite" />
-        <!--weibo-->
-        <package android:name="com.sina.weibo" />
-        <!--qqzone-->
-        <package android:name="com.qzone" />
-    </queries>
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission
