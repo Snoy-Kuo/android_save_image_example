@@ -19,10 +19,10 @@ fun ImageView.getBitmap(): Bitmap? {
     return null
 }
 
-fun ImageView.loadViaCoil(data: Any?, onStart: (request: ImageRequest) -> Unit) {
+fun ImageView.loadUsingCoil(data: Any?, onStart: (request: ImageRequest) -> Unit) {
     this.load(data) {
         crossfade(1000)
-        placeholder(this@loadViaCoil.drawable)
+        placeholder(this@loadUsingCoil.drawable)
         listener(onStart = onStart)
     }
 }

@@ -80,10 +80,18 @@
                 tools:ignore="HardcodedText" />
 
             <Button
-                android:id="@+id/btn_share"
+                android:id="@+id/btn_share_intent_resolver"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Share to ..."
+                android:text="Share to ...(Intent Resolver)"
+                android:textAllCaps="false"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btn_share_sharesheet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Share to ...(Sharesheet)"
                 android:textAllCaps="false"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
